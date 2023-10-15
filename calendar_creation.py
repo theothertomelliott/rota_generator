@@ -102,7 +102,8 @@ calendar_events = create_calendar_events(
     participant_names,
     time_window_start=time_window_start if time_window_on else None,
     time_window_end=time_window_end if time_window_on else None,
-    time_window_days=days_enabled)
+    time_window_days=days_enabled
+    )
 
 calendar_options = {
     "headerToolbar": {
@@ -131,6 +132,21 @@ custom_css="""
             font-size: 2rem;
         }
     """,
+
+text_contents = '''Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private'''
+for event in calendar_events:
+    text_contents += '\n'
+    text_contents += event['title'] + ','
+    text_contents += event['start'].split('T')[0] + ','
+    text_contents += event['start'].split('T')[1] + ','
+    text_contents += event['end'].split('T')[0] + ','
+    text_contents += event['end'].split('T')[1] + ','
+    text_contents += 'False,'
+    text_contents += ','
+    text_contents += ','
+    text_contents += 'False'
+
+st.download_button('Download CSV', text_contents, file_name='rota.csv', mime='text/csv')
 
 calendar = calendar(events=calendar_events, options=calendar_options, custom_css=custom_css)
 st.write(calendar)
